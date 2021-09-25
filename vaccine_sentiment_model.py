@@ -170,23 +170,6 @@ plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 
-
-# %%
-''' going CNN with the model '''
-lstm_model = keras.Sequential()
-lstm_model.add(layers.Embedding(vocab_size, embedding_size, input_length=train_padded.shape[1]))
-lstm_model.add(layers.SpatialDropout1D(0.5))
-lstm_model.add(layers.LSTM(64, dropout=0.5, recurrent_dropout=0.5))
-lstm_model.add(layers.Dropout(0.5))
-lstm_model.add(layers.Dense(4, activation='softmax'))
-lstm_model.compile(loss='sparse_categorical_crossentropy', optimizer=keras.optimizers.Adam(learning_rate = 0.001),
-          metrics=['accuracy'])
-
-#%%
-history = lstm_model.fit(train_padded, np.array(sentiment_train_y_resampled), epochs=1000,
-                    validation_data=(test_padded, np.array(sentiment_test_y)),
-                    validation_steps=100, callbacks = [es])
-
 # %%
 test_loss, test_acc = lstm_model.evaluate(test_padded, np.array(sentiment_test_y))
 
